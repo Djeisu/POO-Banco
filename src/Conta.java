@@ -43,45 +43,41 @@ public class Conta {
 		this.operacoes = operacoes;
 	}
 	
-	private void addOperacao(String tp, double val, double sld) {
-		this.operacoes.add(new Operacao(tp,val,this.getSaldo()));
+	private void addOperacao(Operacao op) {
+		this.operacoes.add(op);
 	}
 	
-	public void deposito(double val) {
-		this.setSaldo( val + this.saldo );
-		this.addOperacao("Deposito", val, this.getSaldo());
+	public void deposito(Operacao op) {
+		this.setSaldo( op.getValue() + this.getSaldo() );
+		this.addOperacao(new Operacao(op.getType(),op.getValue(),this.getSaldo()));
 	}
 	
-	public void saque(double val) {
-		if ( (this.getSaldo() - val) > 0 && this.getSaldo() > 0) {
-			this.setSaldo(this.saldo-val);
-			this.addOperacao("Saque", val, this.getSaldo());
+	public void saque(Operacao op) {
+		if ( this.validSaldo(op) ) {
+			this.setSaldo(this.getSaldo() - op.getValue());
+			this.addOperacao(new Operacao(op.getType(),op.getValue(),this.getSaldo()));
 		}else {
 			System.out.println("Operação de Saque inválida, seu saldo não é suficiênte.");
 			System.out.println("-------------------------------------------------------------------");
 		}
 	}
 	
+	public boolean validSaldo(Operacao op) {
+		return (this.getSaldo() - op.getValue()) > 0 && this.getSaldo() > 0;
+	}
+	
 	public void extrato() {
 		for (Operacao o : this.operacoes) {
-			System.out.println("Você realizou um " + o.getType() + " com valor R$ " + o.getValue());
+			System.out.println("Você realizou um " + (o.getType() == 's' ? "Saque" : "Deposito" ) + " com valor R$ " + o.getValue());
 			System.out.println("Saldo final nessa operação R$ " + o.getSaldo());
 			System.out.println("-------------------------------------------------------------------");
 		}
 		System.out.println("Seu Saldo Atual é R$ " + this.saldo);
 	}
 	
-	public void extrato(int nOperacoes) {		
-//		for (int i = this.getNOperacao()-1; i > nOperacoes; i--) {
-//			System.out.println(i);
-//			System.out.println("Você realizou um " + this.operacoes.get(i).getType() + " com valor R$ " + this.operacoes.get(i).getValue());
-//			System.out.println("Saldo Final R$ " + this.operacoes.get(i).getSaldo());
-//			System.out.println("-------------------------------------------------------------------");
-//		}
-//		
+	public void extrato(int nOperacoes) {
 		for (int i = nOperacoes; i < this.getNOperacao() ; i++) {
-//			System.out.println(i);
-			System.out.println("Você realizou um " + this.operacoes.get(i).getType() + " com valor R$ " + this.operacoes.get(i).getValue());
+			System.out.println("Você realizou um " + (this.operacoes.get(i).getType() == 's' ? "Saque" : "Deposito" ) + " com valor R$ " + this.operacoes.get(i).getValue());
 			System.out.println("Saldo final nessa operação R$ " + this.operacoes.get(i).getSaldo());
 			System.out.println("-------------------------------------------------------------------");
 		}

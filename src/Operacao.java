@@ -1,6 +1,6 @@
 
 public class Operacao {
-	private String type;
+	private char type;
 	private double value;
 	private double saldo;
 	
@@ -8,16 +8,16 @@ public class Operacao {
 		
 	}
 	
-	Operacao(String tp, double val, double sld){
+	Operacao(char tp, double val, double sld){
 		this.type = tp;
 		this.value = val;
 		this.setSaldo(sld);
 	}
 	
-	public String getType() {
+	public char getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(char type) {
 		this.type = type;
 	}
 	
